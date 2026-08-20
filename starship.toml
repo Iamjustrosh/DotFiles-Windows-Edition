@@ -1,0 +1,14 @@
+add_newline = true
+
+[directory]
+truncation_length = 3
+
+[git_branch]
+symbol = " "
+
+[git_status]
+disabled = false
+
+[cmd_duration]
+min_time = 2000
+show_milliseconds = false
