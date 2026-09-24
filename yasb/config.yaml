@@ -1,0 +1,380 @@
+watch_stylesheet: true
+watch_config: true
+debug: false
+komorebi:
+  start_command: "komorebic start --whkd"
+  stop_command: "komorebic stop --whkd"
+  reload_command: "komorebic stop --whkd && komorebic start --whkd"
+bars:
+  primary-bar:
+    enabled: true
+    screens: ['*'] 
+    class_name: "yasb-bar"
+    alignment:
+      position: "top"
+    blur_effect:
+      enabled: false
+      dark_mode: true
+      round_corners: false
+      border_color: None
+    window_flags:
+      always_on_top: true
+      windows_app_bar: true
+      hide_on_fullscreen: true
+    dimensions:
+      width: "100%"
+      height: 28
+    padding:
+      top: 12
+      left: 8
+      bottom: 2
+      right: 8
+    widgets:
+      left:
+        [
+          "quick_launch",
+          "komorebi_workspaces",
+          "komorebi_active_layout",
+          "active_window",
+          "custom_wallpaper",
+        ]
+      center:
+        ["clock"]
+      right:
+        [     
+          "media",
+          "systray",
+          "volume", 
+          "disk",
+          "cpu",
+          "memory",
+          "power_menu"
+        ]
+widgets:
+  home:
+    type: "yasb.home.HomeWidget"
+    options:
+      label: "<span>\udb80\udf5c</span>"
+      menu_list:
+      - { title: "Home", path: "~" }
+      - { title: "Downloads", path: "~\\Downloads"}
+      - { title: "Documents", path: "~\\Documents"}
+      - { title: "Pictures", path: "~\\Pictures"}
+      - { title: "Videos", path: "~\\Videos"}
+      system_menu: true
+      power_menu: false
+      blur: true
+      round_corners: true
+      round_corners_type: "normal"
+      border_color: ""
+      alignment: "left"
+      direction: "down"
+      menu_labels:
+        shutdown: "Shutdown"
+        restart: "Restart"
+        logout: "Logout"
+        lock: "Lock"
+        sleep: "Sleep"
+        system: "System Settings"
+        about: "About This PC"
+        task_manager: "Task Manager"
+  quick_launch:
+    type: yasb.quick_launch.QuickLaunchWidget
+    options:
+      label: "<span>\uf002</span>"
+      search_placeholder: Search applications...
+      max_results: 30
+      show_icons: true
+      icon_size: 18
+      compact_text: true
+      providers:
+        apps:
+          enabled: true
+          prefix: '*'
+          priority: 0
+          show_recent: true
+          max_recent: 5
+          show_description: true
+      popup:
+        width: 720
+        height: 480
+        blur: true
+        round_corners: true
+        round_corners_type: normal
+        border_color: system
+        dark_mode: false
+      callbacks:
+        on_left: toggle_quick_launch
+      keybindings:
+      - keys: alt+space
+        action: toggle_quick_launch
+        screen: primary
+  komorebi_workspaces:
+    type: "komorebi.workspaces.WorkspaceWidget"
+    options:
+        label_offline: "\u26a1 Offline"
+        label_workspace_btn: ""
+        label_workspace_active_btn: ""
+        label_workspace_populated_btn: ""
+        label_default_name: "{index}"
+        label_zero_index: false
+        hide_empty_workspaces: false
+        hide_if_offline: false
+  media:
+      type: yasb.media.MediaWidget
+      options:
+        label: '{title}{s}{artist}'
+        label_alt: '{title}'
+        separator: ' - '
+        hide_empty: true
+        callbacks:
+          on_left: toggle_media_menu
+          on_middle: do_nothing
+          on_right: do_nothing
+        max_field_size:
+          label: 20
+          label_alt: 20
+        show_thumbnail: true
+        controls_only: false
+        controls_left: true
+        controls_hide: true
+        thumbnail_alpha: 100
+        thumbnail_padding: 10
+        thumbnail_edge_fade: true
+        icons:
+          prev_track: "\uE892"
+          next_track: "\uE893"
+          play: "\uE768"
+          pause: "\uE769"
+        media_menu:
+          blur: true
+          round_corners: true
+          round_corners_type: normal
+          border_color: system
+          alignment: center
+          direction: down
+          thumbnail_corner_radius: 8
+          thumbnail_size: 120
+          max_title_size: 60
+          max_artist_size: 20
+          show_volume_slider: true
+        scrolling_label:
+          enabled: true
+          style: bounce
+          update_interval_ms: 40
+  systray:
+    type: yasb.systray.SystrayWidget
+    options:
+      class_name: systray
+      label_collapsed: "▼"
+      label_expanded: "▶"
+      label_position: right
+      pin_click_modifier: ctrl
+      show_unpinned: false
+      show_battery: false
+      show_volume: false
+      icon_size: 16
+      use_hook: true
+      show_in_popup: true
+      icons_per_row: 5
+      popup:
+        blur: true
+        round_corners: true
+        round_corners_type: normal
+        border_color: None
+        alignment: center
+        direction: down
+        offset_top: 6
+        offset_left: 0
+  active_window:
+    type: "yasb.active_window.ActiveWindowWidget"
+    options:
+      label: "{win[title]}"
+      label_alt: "[class_name='{win[class_name]}' exe='{win[process][name]}' hwnd={win[hwnd]}]"
+      label_no_window: ""
+      label_icon: true
+      label_icon_size: 14
+      max_length: 36
+      max_length_ellipsis: "..."
+      monitor_exclusive: true
+  # volume:
+  #   type: "yasb.volume.VolumeWidget"
+  #   options:
+  #     label: "<span>{icon}</span> {level}"
+  #     label_alt: "{volume}"
+  #     icons:
+  #       - "\ueee8"  # Icon for muted
+  #       - "\uf026"  # Icon for 0-10% volume
+  #       - "\uf027"  # Icon for 11-30% volume
+  #       - "\uf027"  # Icon for 31-60% volume
+  #       - "\uf028"  # Icon for 61-100% volume
+  #     callbacks:
+  #       on_right: "exec cmd.exe /c start ms-settings:sound"
+  clock:
+    type: "yasb.clock.ClockWidget"
+    options:
+      label: "{%a %b %d %H:%M}"
+      label_alt: "{%A, %d %B %Y %H:%M}"
+      timezones: []
+      calendar:
+        alignment: "center"
+  disk:
+    type: "yasb.disk.DiskWidget"
+    options:
+        label: "<span>\uf473</span>"
+        label_alt: "<span>\uf473</span>"
+        update_interval: 60
+        group_label:
+          volume_labels: ["C", "D", "E", "F"]
+          show_label_name: false
+          blur: True
+          round_corners: True
+          round_corners_type: "small"
+          border_color: "System"
+          alignment: "right"
+          direction: "down"
+        callbacks:
+          on_left: "toggle_group"
+          on_middle: "toggle_label"
+          on_right: "exec explorer C:\\" # Open disk C in file explorer
+  power_menu:
+      type: "yasb.power_menu.PowerMenuWidget"
+      options:
+        label: "\uf011"
+        uptime: True
+        blur: False
+        blur_background: True
+        animation_duration: 250 # Milisecond 
+        button_row: 5 # Number of buttons in row, min 1 max 5
+        buttons:
+          signout: ["\udb80\udf43","Sign out"]
+          shutdown: ["\uf011","Shut Down"]
+          restart: ["\uead2","Restart"]
+          hibernate: ["\uf28e","Hibernate"]
+          cancel: ["\udb81\udf3a","Cancel"]
+  komorebi_active_layout:
+    type: "komorebi.active_layout.ActiveLayoutWidget"
+    options:
+      hide_if_offline: true
+      label: "{icon} {layout_name}"
+      layouts: ['bsp', 'columns', 'rows', 'grid', 'scrolling', 'vertical_stack', 'horizontal_stack', 'ultrawide_vertical_stack','right_main_vertical_stack']
+      layout_icons:
+        bsp: "\uebeb"
+        columns: "\uebf7"
+        rows: "\uec01"
+        grid: "\udb81\udf58"
+        scrolling: "\uebf7"
+        vertical_stack: "\uebee"
+        horizontal_stack: "\uebf0"
+        ultrawide_vertical_stack: "\uebee"
+        right_main_vertical_stack: "\uebf1"
+        monocle: "\uf06f"
+        maximized: "\uf06f"
+        floating: "\uf2d2"
+        paused: "\udb83\udf89"
+        tiling: "\udb81\ude40"
+      callbacks:
+        on_left: 'toggle_layout_menu'
+        on_middle: 'next_layout'
+        on_right: 'prev_layout'
+      layout_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "left"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        show_layout_icons: true
+
+  cpu:
+    type: yasb.cpu.CpuWidget
+    options:
+      label: "<span>\uf4bc</span> {info[percent][total]}%"
+      label_alt: '{info[freq][current]} MHz'
+      update_interval: 2000
+      hide_decimal: true
+      menu:
+        enabled: true
+        show_graph: true
+        show_graph_grid: true
+        graph_history_size: 60
+        alignment: center
+      callbacks:
+        on_left: toggle_menu
+        on_middle: do_nothing
+        on_right: toggle_label
+  memory:
+    type: yasb.memory.MemoryWidget
+    options:
+      label: "<span>\uEFC5</span> {virtual_mem_free}"
+      label_alt: "<span>\uEFC5</span> VIRT: {virtual_mem_percent}% SWAP: {swap_mem_percent}%"
+      update_interval: 5000
+      hide_decimal: true
+      callbacks:
+        on_left: toggle_menu
+        on_middle: do_nothing
+        on_right: toggle_label
+      menu:
+        enabled: true
+        show_graph: true
+        show_graph_grid: true
+        graph_history_size: 60
+        alignment: center
+  volume:
+    type: "yasb.volume.VolumeWidget"
+    options:
+      label: "<span>{icon}</span> {level}"
+      label_alt: "{level}"
+      icons:
+        "muted": "\ueee8" # Icon for muted
+        "10": "\uf026"  # Icon for 0-10% volume
+        "30": "\uf027"  # Icon for 11-30% volume
+        "60": "\uf027"  # Icon for 31-60% volume
+        "100": "\uf028" # Icon for 61-100% volume
+      audio_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "right"
+        direction: "down"
+      callbacks:
+        on_left: "toggle_volume_menu"
+        on_right: "toggle_mute"
+
+  audio_menu:
+    blur: true # Enable blur effect for the menu
+    round_corners: true # Enable round corners for the menu (not supported on Windows 10)
+    round_corners_type: "normal" # Set the type of round corners for the menu (normal, small) (not supported on Windows 10)
+    border_color: "system" # Set the border color for the menu, "system", Hex color or None
+    alignment: "right" # Set the alignment of the menu (left, right, center)
+    direction: "down" # Set the direction of the menu (up, down)
+    offset_top: 6 # Set the top offset of the menu
+    offset_left: 0 # Set the left offset of the menu
+    show_apps: true # Whether to show the list of applications with audio sessions
+    show_app_labels: false # Whether to show application labels in the audio menu
+    show_app_icons: true # Whether to show application icons in the audio menu
+    show_apps_expanded: false # Whether application volumes are expanded by default when opening the menu
+    app_icons: # Icons for the toggle button to expand/collapse application volumes
+      toggle_down: "\uf078" # Icon for btn collapsed state
+      toggle_up: "\uf077" # Icon for btn expanded state
+
+  # custom_wallpaper:
+  #   type: "yasb.custom.CustomWidget"
+  #   options:
+  #     label: ""
+  #     class_name: "wallpaper-button"
+  #     tooltip: true
+  #     callbacks:
+  #       on_left: "C:\\Scripts\\wallpaper-next.cmd"
+  custom_wallpaper:
+    type: "yasb.custom.CustomWidget"
+    options:
+      label: "<span>\uf03d</span>"
+      class_name: "wallpaper-button"
+      tooltip: true
+      tooltip_label: "Change wallpaper"
+      callbacks:
+        on_left: 'exec cmd /c ""C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\wallpaper64.exe" -control nextWallpaper"'
