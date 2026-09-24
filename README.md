@@ -433,6 +433,9 @@ alias btop='btop4win'
 
 Make sure `btop4win` is installed on Windows and available from the MSYS2 shell's `PATH`.
 
+```bash
+winget install aristocratos.btop4win
+```
 Verify:
 
 ```bash
