@@ -917,7 +917,7 @@
 /* CPU */
 .cpu-widget {
     background-color: var(--surface1);
-		padding: 3px;
+	padding: 0 8px;
 }
 .cpu-widget .icon {
     padding-right: 4px;
@@ -994,6 +994,7 @@
 
 .memory-widget {
     background-color: var(--surface1);
+    padding: 0 8px;
 }
 .memory-widget .icon {
     padding-right: 6px;
@@ -1090,3 +1091,12 @@
     color: var(--text);
     font-size: 13px;
 }
+
+
+.apps-widget {
+    background-color: var(--surface1);
+    padding: 0 8px;
+}
+.apps-widget .widget-container .label { 
+    padding: 0 1px;
+ } 

@@ -39,7 +39,10 @@ bars:
           "custom_wallpaper",
         ]
       center:
-        ["clock"]
+        [
+          "clock",
+          "apps",
+        ]
       right:
         [     
           "media",
@@ -361,20 +364,22 @@ widgets:
       toggle_down: "\uf078" # Icon for btn collapsed state
       toggle_up: "\uf077" # Icon for btn expanded state
 
-  # custom_wallpaper:
-  #   type: "yasb.custom.CustomWidget"
-  #   options:
-  #     label: ""
-  #     class_name: "wallpaper-button"
-  #     tooltip: true
-  #     callbacks:
-  #       on_left: "C:\\Scripts\\wallpaper-next.cmd"
   custom_wallpaper:
     type: "yasb.custom.CustomWidget"
     options:
-      label: "<span>\uf03d</span>"
+      label: "<span>\ue244</span>"
       class_name: "wallpaper-button"
       tooltip: true
       tooltip_label: "Change wallpaper"
       callbacks:
         on_left: 'exec cmd /c ""C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\wallpaper64.exe" -control nextWallpaper"'
+
+  apps:
+    type: "yasb.applications.ApplicationsWidget"
+    options:
+      label: "{data}"
+      app_list:
+        - {icon: "\uf489", launch: "wt", name: "Windows Terminal"} # launch terminal
+        - {icon: "\uE8DA", launch: "C:\\Users\\rosha\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe", name: "VS Code"} # open vscode
+        - {icon: "\ueaae",launch: "\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\" -new-tab", name: "New Tab"} # open reddit in new tab in firefox C:\Program Files\BraveSoftware\Brave-Browser\Application
+        - {icon: "\uf488", launch: "\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\" --incognito --new-window", name: "New Private Window"}
