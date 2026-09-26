@@ -2,9 +2,228 @@
 
 A simple, reproducible Windows terminal setup using **MSYS2 UCRT64 + Zsh**.
 
-This repository is the **source of truth** for the shell. If you move to another Windows PC, follow this README in order instead of rebuilding the setup from memory.
+This repository is the source of truth for the shell. If you move to another Windows PC, follow this README in order instead of rebuilding the setup from memory.
 
-> **Important:** This is **MSYS2**, not WSL. The shell runs from `C:\msys64`.
+> **Important:** This is MSYS2, not WSL. The shell runs from `C:\msys64`.
+
+---
+
+## ⚡ Quick Setup — Do This First
+
+If you're setting this up on a **fresh Windows machine**, follow this checklist from top to bottom. The detailed explanations and commands are below.
+
+### 1. Install the prerequisites
+
+* Install **MSYS2**.
+* Install **Windows Terminal**.
+* Install **VS Code** if you want the VS Code terminal integration.
+* Install **WezTerm** if you want the WezTerm setup. (Optional Terminal Used for fastfetch image loading)
+* Install a **Nerd Font** for the `arch_end` theme icons.
+* Install **Node.js** and **Bun** if you need JavaScript/TypeScript tooling.
+* Install **btop4win** for the `btop` command.
+
+### 2. Open the correct MSYS2 terminal
+
+* Open **MSYS2 UCRT64**, not the regular MSYS shell.
+* Verify with:
+  `echo $MSYSTEM`
+* It must return:
+  `UCRT64`
+
+### 3. Update MSYS2
+
+* Run:
+  `pacman -Syu`
+* If MSYS2 asks you to restart the terminal, close it, reopen **UCRT64**, and run the update again.
+
+### 4. Install the shell tools
+
+Install the packages used by this configuration:
+
+```bash
+pacman -S --needed git zsh mingw-w64-ucrt-x86_64-fzf mingw-w64-ucrt-x86_64-zoxide mingw-w64-ucrt-x86_64-eza mingw-w64-ucrt-x86_64-bat mingw-w64-ucrt-x86_64-fd mingw-w64-ucrt-x86_64-ripgrep mingw-w64-ucrt-x86_64-fastfetch
+```
+
+### 5. Install Oh My Zsh
+
+* Install **Oh My Zsh**.
+* Make sure `~/.oh-my-zsh` exists.
+* Copy `arch_end.zsh-theme` from this repository into:
+  `~/.oh-my-zsh/custom/themes/`
+
+### 6. Install Zinit
+
+* Install **Zinit** into:
+  `~/.local/share/zinit/zinit.git`
+* The repository `.zshrc` will load the required plugins automatically.
+* **Do not enable `zsh-syntax-highlighting`** — it caused typing lag in this MSYS2 setup.
+
+### 7. Clone this repository
+
+Clone the repository somewhere convenient on Windows, for example:
+
+```text
+D:\Projects\DotFiles-Windows-Edition
+```
+
+The repository is your **source of truth**. Do not treat the live MSYS2 files as the backup.
+
+### 8. Copy the configuration files
+
+Copy these repository files into your MSYS2 home:
+
+```text
+.zshrc
+    → ~/.zshrc
+
+arch_end.zsh-theme
+    → ~/.oh-my-zsh/custom/themes/arch_end.zsh-theme
+
+fastfetch/config.jsonc
+    → ~/.config/fastfetch/config.jsonc
+
+fastfetch/images/logo.png
+    → ~/.config/fastfetch/images/logo.png
+
+starship.toml
+    → ~/.config/starship.toml
+```
+
+### 9. Configure Windows Terminal
+
+Add the MSYS2 UCRT64 + Zsh profile:
+
+```json
+{
+    "commandline": "C:/msys64/msys2_shell.cmd -defterm -here -no-start -ucrt64 -use-full-path -shell zsh",
+    "name": "Zsh (MSYS2 UCRT64)",
+    "startingDirectory": "%USERPROFILE%"
+}
+```
+
+### 10. Configure VS Code
+
+Add the **MSYS2 Zsh** terminal profile to VS Code `settings.json` and make it the default terminal.
+
+The detailed configuration is in **Step 6 — Configure VS Code Terminal** below.
+
+### 11. Configure WezTerm
+
+Configure WezTerm to launch the same:
+
+```text
+MSYS2 → UCRT64 → Zsh
+```
+
+Then verify:
+
+```bash
+echo $MSYSTEM
+```
+
+It should return:
+
+```text
+UCRT64
+```
+
+### 12. Restore VS Code extensions
+
+From PowerShell, inside the repository:
+
+```powershell
+Get-Content ".\vsc export\vsc-extensions.txt" | ForEach-Object { code --install-extension $_ }
+```
+
+### 13. Install btop4win
+
+From PowerShell:
+
+```powershell
+winget install aristocratos.btop4win
+```
+
+Then restart the MSYS2 terminal.
+
+### 14. Verify Node, Bun and the shell
+
+Run:
+
+```bash
+node --version
+npm --version
+bun --version
+
+zsh --version
+git --version
+zinit version
+fzf --version
+zoxide --version
+eza --version
+bat --version
+fd --version
+rg --version
+fastfetch --version
+command -v btop4win
+```
+
+### 15. Check `.zshrc` before restarting
+
+Run:
+
+```bash
+zsh -n ~/.zshrc
+```
+
+**No output = syntax check passed.**
+
+### 16. Reload Zsh
+
+Run:
+
+```bash
+exec zsh
+```
+
+### 17. Test the important features
+
+Run:
+
+```bash
+ll
+z Documents
+zi
+ff
+btop
+```
+
+If these work, the core setup is ready.
+
+### 18. Remember the configuration workflow
+
+Whenever you make changes:
+
+```text
+EDIT REPOSITORY
+      ↓
+CHECK SYNTAX
+      ↓
+COPY CHANGED FILE TO LIVE MSYS2 HOME
+      ↓
+RELOAD ZSH
+      ↓
+VERIFY
+      ↓
+COMMIT + PUSH
+```
+
+> **Important:** Editing a file inside the Git repository does **not** automatically change the live MSYS2 configuration. You must copy the changed file to its live location.
+
+---
+
+## 📖 Detailed Setup
+
+The sections below explain every step, why it is required, and how the individual parts of the environment work.
 
 ---
 
